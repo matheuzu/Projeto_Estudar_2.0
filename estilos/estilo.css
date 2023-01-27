@@ -1,0 +1,519 @@
+@charset "UTF-8";
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #242423;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 80% 20%;
+    align-items: center;
+    justify-items: center;
+}
+
+/* Quadro */
+
+#quadro {
+    width: 98%;
+    height: 100%;
+    margin-top: 20px;
+    align-self: flex-start;
+    background-color: #333533;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#container_barra {
+    width: 98%;
+    height: 40%;
+    background-color: #333533;
+    grid-column: 1/2;
+    grid-row: 2/3;
+
+    display: grid;
+    grid-template-columns: 7% 93%;
+}
+
+#play, #pause{
+    height: 80%;
+    width: 80%;
+    align-self: center;
+    grid-column: 1/2;
+    justify-self: center;
+    background: url(../imagens/play.png) center center no-repeat;
+    background-size: contain;
+}
+
+#pause {
+    background: url(../imagens/mais.png) center center no-repeat;
+    background-size: contain;
+    display: none;
+}
+
+#container_barraProgresso {
+    width: 100%;
+    height: 80%;
+    align-self: center;
+    grid-column: 2/3;
+}
+
+#barra_progresso {
+    width: 0px;
+    height: 100%;
+}
+
+#menu_lateral {
+    background-color: #e8eddf;
+    width: 90%;
+    height: 95%;
+    grid-column: 2/3;
+    grid-row: 1/3;
+    grid-template-columns: 20% 80%;
+}
+
+#salvar {
+    background-color: #5FAFF5;
+    grid-column: 1/2;
+    width: 80px;
+    height: 85px;
+    margin: 15px;
+}
+
+/* Botão Criar */
+
+#criar {
+    box-sizing: border-box;
+    margin: 35px;
+    height: 42%;
+    width: 75px;
+    border-radius: 15px;
+    order: 999;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#escolha {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.escolha_btn {
+    border: none;
+    display: block;
+    height: 33.3%;
+    width: 100%;
+    border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0);
+    border-collapse: collapse;
+}
+
+#escolha_criar {
+    border: 4px dashed #6E28A8;
+    border-radius: 15px 15px 0px 0px;
+    border-bottom: none;
+    background: url(../imagens/mais.png) center center no-repeat;
+    background-size: contain;
+}
+
+#escolha_descanco {
+    border: 4px dashed #5FAFF5;
+    background: url(../imagens/tempo.png) center center no-repeat;
+    background-size: contain;
+}
+ 
+#escolha_premio {
+    border: 4px dashed #f5cb5c;
+    border-top: none;
+    background: url(../imagens/troféu.png) center center no-repeat;
+    background-size: contain;
+    border-radius: 0px 0px 15px 15px;
+} 
+
+/* Bloco */
+
+.bloco, .bloco_concluido {
+    display: grid;
+    grid-template-columns: 50% 30% 20%;
+    grid-template-rows: 20% 55% 25%;
+    margin: 35px;
+    width: 17%;
+    height: 42%;
+    background-color: #fff;
+}
+
+.bloco_concluido {
+    opacity: 50%;
+}
+
+.bloco .titulo, .bloco_concluido .titulo {
+    height: 50%;
+    width: 70%;
+    grid-column: 1/2;
+    text-indent: 15px;
+    align-self: center;
+    font-size: 1.5em;
+}
+
+.bloco .tempo, .bloco_concluido .tempo {
+    width: 30%;
+    height: 50%;
+    align-self: center;
+    grid-column: 2/3;
+    font-size: 1.5em;
+    text-indent: 15px;
+    color: #5FAFF5;
+}
+
+.bloco .marcador, .bloco_concluido .marcador{
+    grid-column: 3/4;
+    position: relative;
+    width: 180%;
+    height: 180%;
+    top: -6px;
+    left: -25px;
+}
+
+.bloco .anotacao, .bloco_concluido .anotacao{
+    height: 100%;
+    width: 100%;
+    grid-row: 2/3;
+    grid-column: 1/4;
+    margin: auto;
+    overflow: hidden;
+    justify-self: flex-start;
+}
+
+.bloco .anotacao p, .bloco_concluido .anotacao p {
+    height: 100%;
+    padding: 15px;
+    text-indent: 5px;
+}
+
+.bloco .revisao, .bloco_concluido .revisao{
+    height: 100%;
+    grid-row: 3/4;
+}
+
+/* Descanço */
+
+/* Prêmio */
+
+/* Janela Modal / Formulário*/
+
+#fundo_modal {
+    display: none;
+    position:absolute;
+    background-color: rgba(0, 0, 0, 0.216);
+    height: 100vh;
+    width: 100vw;
+}
+
+#modal {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#form_modal {
+    color: white;
+    border-radius: 30px 5px;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-rows: auto auto auto;
+
+    width: 650px;
+    height: 550px;
+    background-color: #242423;
+    padding: 25px;
+}
+
+#form_modal #titulo_bloco { 
+    display: block;
+    width: 100%;
+    height: 60%;
+    background-color: #e8eddf;
+    border-radius:  15px 15px;
+    outline: 2px solid #333533;
+    align-self: baseline;
+    justify-self: center;
+    font-size: 1em;
+    text-indent: 20px;
+    grid-column: 1/4;
+}
+
+#form_modal #titulo_bloco:focus {
+    outline: 5px solid #f5cb5c;
+    border: none;
+}
+
+#form_modal #tempo_bloco {
+    grid-column: 5/6;
+    grid-row: 1/2;
+    height: 60%;
+    width: 80%;
+    align-self: baseline;
+    justify-self: flex-end;
+    background-color: transparent;
+    font-size: 1em;
+    text-indent: 15px;
+    color: white;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+}
+
+#form_modal #tempo_bloco:focus {
+    outline: 5px solid #f5cb5c;
+}
+
+#texto_input {
+    grid-row: 2/3;
+    grid-column: 1/6;
+}
+
+#form_modal textarea {
+    display: block;
+    width: 100%;
+    height: 90%;
+    margin: auto;
+    text-indent: 15px;
+    padding-top: 15px;
+    border-radius: 25px 5px 25px 5px;
+    background-color: #e8eddf;
+    outline: 2px solid #333533;
+}
+
+#form_modal textarea:focus {
+    border: none;
+    outline: 5px solid #f5cb5c;
+}
+
+#form_modal #botoes {
+    grid-column: 4/6;
+    grid-row: 3/4;
+    height: 30%;
+    align-self: flex-end;
+}
+
+#form_modal button {
+    background-color: #e8eddf;
+    width: 40%;
+    height: 100%;
+    border-radius: 15px;
+    border: none;
+    float: right;
+    margin-right: 15px;
+}
+
+#form_modal #submit {
+    background-color: #f5cb5c;
+    margin-right: 0px;
+}
+
+#form_modal #etiqueta {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 1/3;
+    width: 90%;
+    height: 90%;
+    align-self: center;
+    background-color: #333533;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#form_modal .select_etiqueta {
+    width: 33%;
+    height: 48%;
+    opacity: 50%;
+}
+
+#form_modal .selecionado {
+    opacity: 100%;
+}
+
+#form_modal #etiqueta_amarelo {
+    background: url(../imagens/marcador_amarelo.png) center center no-repeat;
+    background-size: contain;
+}
+
+#form_modal #etiqueta_verde {
+    background: url(../imagens/marcador_verde.png) center center no-repeat;
+    background-size: contain;
+}
+
+#form_modal #etiqueta_azul {
+    background: url(../imagens/marcador_azul.png) center center no-repeat;
+    background-size: contain;
+}
+
+#form_modal #etiqueta_laranja {
+    background: url(../imagens/marcador_laranja.png) center center no-repeat;
+    background-size: contain;
+}
+
+#form_modal #etiqueta_vermelho {
+    background: url(../imagens/marcador_vermelho.png) center center no-repeat;
+    background-size: contain;
+} 
+
+#form_modal #etiqueta_roxo {
+    background: url(../imagens/marcador_roxo.png) center center no-repeat;
+    background-size: contain;
+}
+
+#form_modal #revisao_container {
+    grid-column: 3/4;
+    width: 70%;
+    height: 100%;
+    align-self: center;
+    justify-self: baseline;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 25% 25% 25% ;
+    justify-items: center;
+    align-items: center;
+}
+
+#form_modal label {
+    display: flex;
+    width: 100%;
+    align-content: center;
+}
+
+#form_modal label .revisao_marcar {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: #333533;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid #fff;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    margin-right: 15px;
+    display: grid;
+    place-content: center;
+}
+
+#form_modal label .revisao_marcar::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #f5cb5c;
+  }
+
+  #form_modal label .revisao_marcar:checked::before {
+    transform: scale(1);
+  }
+
+.form-control + .form-control {
+    margin-top: 1em;
+  }
+
+.descanco, .descanco_concluido {
+    margin: 33px;
+    height: 42%;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    outline: 2px dashed #5FAFF5;
+}
+
+.descanco_concluido {
+    opacity: 50%;
+}
+
+#descanco_relogio {
+    height: 40%;
+}
+
+#descanco_relogio img {
+    width: 100%;
+}
+
+#descancoTexto {
+    height: 40%;
+    width: 100%;
+    display: grid;
+}
+
+#descancoTexto #campoTempo, #descancoTexto div.tempo {
+    width: 80%;
+    font-size: 2.0em;
+    height: 50px;
+    align-self: center;
+    justify-self: center;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+#descancoTexto #campoTempo {
+    outline: 2px dashed #5FAFF5;
+    color: white;
+}
+
+#descancoTexto div.tempo {
+    color: #5FAFF5;
+}
+
+.premio, .premio_concluido {
+    margin: 33px;
+    height: 42%;
+    width: 150px;
+    outline: 2px dashed #f5cb5c;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.premio_concluido {
+    opacity: 50%;
+}
+
+#premio_troféu {
+    height: 40%;
+}
+
+#premio_troféu img {
+    width: 100%;
+}
+
+#premioTexto {
+    height: 40%;
+    width: 100%;
+    display: grid;
+}
+
+#premioTexto #campoPremio, #premioTexto #premio {
+    width: 80%;
+    font-size: 1.0em;
+    height: 50px;
+    align-self: center;
+    justify-self: center;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+#premioTexto #campoPremio {
+    outline: 2px dashed #f5cb5c;
+    color: white;
+}
+
+#premioTexto #premio {
+    color: #f5cb5c;
+}
