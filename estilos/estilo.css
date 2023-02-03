@@ -10,7 +10,7 @@ body {
     background-color: #242423;
     height: 100vh;
     display: grid;
-    grid-template-rows: 5% 95%;
+    grid-template-rows: 7% 93%;
     align-items: center;
     justify-items: center;
 }
@@ -19,13 +19,23 @@ body {
 
 select {
     grid-row: 1/2;
+    width: 20%;
+    height: 100%;
+    align-self: center;
+    justify-self: flex-start;
+    margin: 1%;
+    margin-top: 20px;
+    background-color: #333533;
+    border: none;
+    color: white;
+    text-align: center;
+    font-weight: bolder;
 }
 
 #quadro {
     grid-row: 2/3;
     width: 98%;
-    height: 95%;
-    margin-top: 20px;
+    height: 98%;
     align-self: flex-start;
     background-color: #333533;
     display: flex;
@@ -106,21 +116,30 @@ select {
 }
 
 .bloco .editar, .bloco .lixeira {
-    height: 50%;
-    width: 90%;
+    height: 70%;
+    width: 70%;
     align-self: flex-end;
     justify-self: center;
     margin-bottom: 10px;
+    display: grid;
+    border-radius: 15px;
 }
 
 .bloco .editar {
     grid-column: 3/4;
     background-color: #5FAFF5;
+    color: #333533;
+}
+
+.bloco .editar #editar, #lixo {
+    align-self: center;
+    justify-self: center;
 }
 
 .bloco .lixeira {
     grid-column: 4/5;
-    background-color: red;
+    background-color: #6E28A8;
+    color: white;
 }
 
 /* Janela Modal / Formulário*/

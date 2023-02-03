@@ -20,6 +20,7 @@ function abrirModal(acao = '', id = '', titulo = '', descricao = '', tempo = '')
     inputTitulo.placeholder = 'Título';
     inputTitulo.className = 'required';
     inputTitulo.value = titulo;
+    inputTitulo.autocomplete = 'off';
 
     let inputTempo = document.createElement('input');
     inputTempo.type = 'text';
@@ -141,13 +142,7 @@ function esconderModal() {
     fundo.remove();
 }
 
-function excluirBloco(id) {
+function excluir(id) {
     window.confirm('dejesa apagar esse bloco?')
-    location.href = 'app/quadro.controller.php?acao=remover&id='+id;
-}
-
-function excluirRevisao(id) {
-    window.confirm('dejesa apagar essa revisao?')
-    location.href = 'app/quadro.controller.php?acao=removerRevisao&id='+id;
-
+    location.href = 'app/quadro.controller.php?acao=remover&id='+id+'&dia='+document.querySelector('#data').value;
 }

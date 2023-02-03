@@ -29,7 +29,7 @@
         $quadroService->inserir();
         $quadroService->inserirRevisoes();  
 
-        header('Location: ../index.php');
+        header('Location: ../index.php?dia='.$dia);
 
     } else if($acao == 'recuperar') { # RECUPERAR
 
@@ -38,7 +38,7 @@
         $conexao = new Conexao();
 
         $quadroService = new QuadroService($conexao, $bloco);
-        $Todosblocos = $quadroService->recuperar();
+        $blocos = $quadroService->recuperar();
 
     } else if($acao == 'atualizar') { #ATUALIZAR
 
@@ -48,19 +48,12 @@
               ->__set('tempo', $_POST['tempo'])
               ->__set('descricao', $_POST['descricao']);
 
-        $bloco
-              ->setRevisao(
-              $_POST['revisao_1'],
-              $_POST['revisao_7'],
-              $_POST['revisao_30'],
-              $_POST['revisao_60']);
-
         $conexao = new Conexao();
         
         $quadroService = new QuadroService($conexao, $bloco);
         $quadroService->atualizar();
 
-        header('Location: ../index.php');
+        header('Location: ../index.php?dia='.$dia);
 
     } else if($acao == 'remover') { #REMOVER
 
@@ -71,19 +64,9 @@
 
         $quadroService = new QuadroService($conexao, $bloco);
         $quadroService->remover();
-
-        header('Location: ../index.php');
-    } else if ($acao == 'removerRevisao') {
-        $bloco = new Bloco();
-        $bloco->__set('id', $_GET['id']);
-
-        $conexao = new Conexao();
-
-        $quadroService = new QuadroService($conexao, $bloco);
-        $quadroService->removerRevisao();
-
-        header('Location: ../index.php');
-    }
+    
+        header('Location: ../index.php?dia='.$dia);
+    } 
 
     $bloco = new Bloco();
     $conexao = new Conexao();

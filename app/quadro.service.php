@@ -67,20 +67,8 @@
 
         public function recuperar() {
 
-            $recuperarAtual = "
+            $query = "
             select 
-                titulo, tempo, descricao, id, data_criacao
-            from 
-                blocos 
-            where 
-                data_criacao = ? ";
-            
-            $stmt = $this->conexao->prepare($recuperarAtual);
-            $stmt->bindValue(1, $this->bloco->dataCriacao);
-            $stmt->execute();
-            $blocosRecuperados['atual'] = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-            $recuperarRevisoes = "select 
                 b.titulo, b.tempo, b.descricao, r.dia, r.revisao_id, b.id
             from 
                 blocos as b RIGHT JOIN revisao as r
@@ -89,12 +77,10 @@
             where 
                 r.dia = ?";
 
-            $stmt = $this->conexao->prepare($recuperarRevisoes);
+            $stmt = $this->conexao->prepare($query);
             $stmt->bindValue(1, $this->bloco->dataCriacao);
             $stmt->execute();
-            $blocosRecuperados['revisoes'] = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-            return $blocosRecuperados;
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
 
         }
 
@@ -134,31 +120,17 @@
             $query = "
 
             delete from 
-                blocos 
-            where 
-                id = ? ; ";
-
-            $stmt = $this->conexao->prepare($query);
-
-            $stmt->bindValue(1, $this->bloco->__get('id'));
-
-            return $stmt->execute();
-
-        }
-
-        public function removerRevisao() {
-            $query = "
-
-            delete from 
                 revisao 
             where 
-                revisao_id = ? ; ";
+                revisao_id = ?;
+            ";
 
             $stmt = $this->conexao->prepare($query);
 
             $stmt->bindValue(1, $this->bloco->__get('id'));
 
-            return $stmt->execute();
+            $stmt->execute();
+
         }
 
     }

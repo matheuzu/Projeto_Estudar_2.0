@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudar</title>
     <link rel="stylesheet" href="estilos/estilo.css">
+    <script src="https://kit.fontawesome.com/f92cd33182.js" crossorigin="anonymous"></script>
     <script>
         function mudarDia(dia) {
             location.href = 'index.php?dia='+dia
@@ -22,20 +23,17 @@
 <body>
     <!-- Quadro -->
     <select name="dias" id="data" onchange="mudarDia(this.value)">
-        <option value="<?= $dia ?>" default><?= $dia ?></option>
+        <option value="<?= $dia ?>" default style="display:none;"><?= $dia ?></option>
+        <option value="<?=date('Y-m-d')?>"><?=date('Y-m-d')?></option>
         <?php 
             sort($dias);
             foreach($dias as $indice => $dia) { 
-            if($indice == 0) { ?> 
-                <option value="<?= date('Y-m-d') ?>"> <?= date('Y-m-d') ?> </option> 
-      <?php } ?>
+            if(date('Y-m-d') != $dia->dia) { ?> 
             <option value="<?=$dia->dia?>"><?=$dia->dia?></option>
-      <?php } ?>
+      <?php } } ?>
         </select> 
     <main id="quadro">
         <?php #imprimindo os blocos no quadro
-        foreach($Todosblocos as $categoria => $blocos) {
-            if($categoria == 'atual') {
             foreach($blocos as $bloco) { ?>
             <div class="bloco">
                 <h3 class="titulo"><?= $bloco->titulo ?></h3>
@@ -44,26 +42,17 @@
                     <p><?= $bloco->descricao ?></p>
                 </div>
                 <div class="revisao"></div>
-                <div class="editar"onclick="editar(<?= $bloco->id ?>, '<?= $bloco->titulo ?>',  `<?= $bloco->descricao ?>`, '<?= $bloco->tempo ?>')">
+                <div class="editar" onclick="editar(<?= $bloco->id ?>, '<?= $bloco->titulo ?>',  `<?= $bloco->descricao ?>`, '<?= $bloco->tempo ?>')">
+                    <div id="editar">
+                        <i class="fa-sharp fa-solid fa-pen-to-square"></i>
+                    </div>
                 </div>
-                <div class="lixeira" onclick="excluirBloco(<?= $bloco->id ?>)">
-                </div>
-            </div>       
-            <?php } } else { 
-            foreach($blocos as $bloco) { ?>                 
-            <div class="bloco">
-                <h3 class="titulo"><?= $bloco->titulo ?></h3>
-                <span class="tempo"><?= $bloco->tempo ?></span>
-                <div class="anotacao">
-                    <p><?= $bloco->descricao ?></p>
-                </div>
-                <div class="revisao"></div>
-                <div class="editar"onclick="editar(<?= $bloco->revisao_id ?>, '<?= $bloco->titulo ?>',  `<?= $bloco->descricao ?>`, '<?= $bloco->tempo ?>')">
-                </div>
-                <div class="lixeira" onclick="excluirRevisao(<?= $bloco->revisao_id ?>)">
-                </div>
-            </div>      
-           <?php } } }?>
+                <div class="lixeira" onclick="excluir(<?= $bloco->revisao_id ?>)">
+                    <div id="lixo">
+                        <i class="fa-sharp fa-solid fa-trash"></i></div>
+                    </div>
+                </div>       
+           <?php } ?>
         <!-- Botão de criar -->
         <div id="criar_container">
             <button onclick="criar()" id="criar">

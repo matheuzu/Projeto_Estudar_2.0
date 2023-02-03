@@ -18,6 +18,7 @@
         }
 
         public function setRevisao($r1 = '', $r7 = '', $r30 = '', $r60 = '') {
+            $this->revisoes[] = 0;
             $this->revisoes[] = $r1;
             $this->revisoes[] = $r7;
             $this->revisoes[] = $r30;
