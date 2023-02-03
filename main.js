@@ -1,357 +1,153 @@
-class Quadro {
-    constructor() {
-        this.quadro = document.querySelector('#quadro');
-        this.slots = Array();
-        this.slotsTempo = Array();
-        this.tempo = 0;
-        this.posicaoTempo = 1;
-        this.cronometro = 0;
-        this.porcentagem = 0;
-    }
 
-    adicionarBloco(bloco) { /* Adicionar o campo de revisão */
-        this.quadro.innerHTML += `        
-        <div id="slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}" class="bloco" onclick="editarBloco()">
-            <h3 class="titulo">${bloco.titulo}</h3>
-            <span class="tempo">${bloco.tempo}</span>
-            <img src="imagens/marcador_${bloco.marcador}.png" class="marcador ${bloco.marcador}}">
-        <div class="anotacao">
-            <p>${bloco.anotacao}</p>
-        </div>
-        <div class="revisao">
-        </div>`
-        let blocoAtual = document.querySelector(`#slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}`)
-        this.slots.push(blocoAtual)
-    }
+function abrirModal(acao = '', id = '', titulo = '', descricao = '', tempo = '') {
+    
 
-    adicionarDescanco() {
-        this.quadro.innerHTML += `
-        <div id="slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}" class="descanco">
-            <div id="descanco_relogio">
-                <img src="imagens/tempo.png" alt="">
-            </div>  
-            <div id="descancoTexto">
-                <input type="text" id="campoTempo" onfocus="submitTempo(${this.slots.length == 0 ? 1 : this.slots.length + 1})">
-            </div> 
-        </div>`
+    let fundo = document.createElement('div');
+    fundo.id = 'fundo_modal';
+    
+    let modal = document.createElement('div');
+    modal.id = 'modal';
 
-        let blocoAtual = document.querySelector(`#slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}`)
-        this.slots.push(blocoAtual)
-        }
+    let form = document.createElement('form');
+    form.action = acao == 'inserir' ? `app/quadro.controller.php?acao=inserir&dia=${document.querySelector('#data').value}` : `app/quadro.controller.php?acao=atualizar&id=${id}&dia=${document.querySelector('#data').value}`;
+    form.method = 'post';
+    form.id = 'form_modal';
 
-    mostrarDescanco(index, tempo) {
-        document.querySelector(`#slot_${index}`).innerHTML = ` 
-        <div id="descanco_relogio">
-            <img src="imagens/tempo.png" alt="">
-        </div>
-        <div id="descancoTexto">
-            <div class="tempo" onclick="quadro.modificarDescanco(${index})">
-                ${tempo} 
-            </div>
-        </div>`
-    }
+    let inputTitulo = document.createElement('input');
+    inputTitulo.type = 'text';
+    inputTitulo.name = 'titulo';
+    inputTitulo.id = 'titulo';
+    inputTitulo.placeholder = 'Título';
+    inputTitulo.className = 'required';
+    inputTitulo.value = titulo;
 
-    modificarDescanco(slot) {
-        console.log(slot)
-        document.querySelector(`#slot_${slot}`).innerHTML = `
-        <div id="descanco_relogio">
-            <img src="imagens/tempo.png" alt="">
-        </div>
-        <div id="descancoTexto">
-            <input type="text" id="campoTempo" onfocus="submitTempo(${slot})">
-        </div>`
-    }
+    let inputTempo = document.createElement('input');
+    inputTempo.type = 'text';
+    inputTempo.name = 'tempo';
+    inputTempo.id = 'tempo';
+    inputTempo.placeholder = 'Tempo';
+    inputTempo.className = 'required';
+    inputTempo.value = tempo;
 
-    /* ============================================================================================  */
+    let texto_input = document.createElement('div') 
+    texto_input.id = 'texto_input';
 
-    adicionarRecompensa() { /* Adicionar o input de tempo de recompensa */
-        this.quadro.innerHTML += ` 
-        <div id="slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}" class="premio">
-            <div id="premio_troféu">
-                <img src="imagens/troféu.png" alt="">
-            </div>
-            <div id="premioTexto">
-                <input type="text" id="campoPremio" onfocus="submitPremio(${this.slots.length == 0 ? 1 : this.slots.length + 1})">
-            </div> 
-        </div>`
+    let inputDescricao = document.createElement('textarea');
+    inputDescricao.name = 'descricao';
+    inputDescricao.id = 'descricao'; 
+    inputDescricao.cols = 30; 
+    inputDescricao.rows = 10; 
+    inputDescricao.placeholder = 'Anotações...'; 
+    inputDescricao.style.resize = 'none'; 
+    inputDescricao.value = descricao; 
 
-        let blocoAtual = document.querySelector(`#slot_${this.slots.length == 0 ? 1 : this.slots.length + 1}`)
-        this.slots.push(blocoAtual)
-        console.log(this.slots)
-    }
-    mostrarRecompensa(index, recompensa) {
-        document.querySelector(`#slot_${index}`).innerHTML = ` 
-        <div id="premio_troféu">
-            <img src="imagens/troféu.png" alt="">
-        </div>
-        <div id="premioTexto">
-            <div id="premio" onclick="quadro.modificarRecompensa(${index})">
-            ${recompensa} 
-        </div>`
-    }
-    modificarRecompensa(slot) {
-        console.log(slot)
-        document.querySelector(`#slot_${slot}`).innerHTML = `
-        <div id="premio_troféu">
-            <img src="imagens/troféu.png" alt="">
-        </div>
-        <div id="premioTexto">
-            <input type="text" id="campoPremio" onfocus="submitPremio(${slot})">
-        </div>`
-    }
+    let revisao_container = document.createElement('div')
+    revisao_container.id = 'revisao_container';
 
-    /* ============================================================================================== */
+    let label1 = document.createElement('label')
+    label1.for = 'revisao_1';
+    
 
-    relogioPlay(acao) {
-        if(document.querySelector(`#barra_progresso`).style.width == '') { /* Mudar para caso queira modificar algum bloco */
-            for(let i = 1; i <= this.slots.length; i++) {
-                if(document.querySelector(`#slot_${i}`).className == 'premio') {
-                    this.tempo+=20;
-                    this.slotsTempo.push(20);
-                }
-                if(document.querySelector(`#slot_${i} .tempo`) != null) {
-                    this.tempo += parseInt(document.querySelector(`#slot_${i} .tempo`).innerHTML);
-                    this.slotsTempo.push(parseInt(document.querySelector(`#slot_${i} .tempo`).innerHTML));
-                }
-            }
-            this.tempo = this.tempo*6000 + 25;  
-        }
-        switch(acao) {
-            case 'play':
-                let relogio = setInterval( function() {
-                    quadro.porcentagem = quadro.cronometro/quadro.tempo * 100;
-                    document.querySelector(`#barra_progresso`).style.width = `${quadro.porcentagem}%`;
-                    mudarCorBarraProgresso(quadro.posicaoTempo)
-                    quadro.cronometro+=25;
-                    if(quadro.slotsTempo[0] > 0 && quadro.cronometro%6000 == 0) {
-                        quadro.slotsTempo[0]--;
-                        document.querySelector(`#slot_${quadro.posicaoTempo} .tempo`).innerHTML = quadro.slotsTempo[0]; // remover ou fazer uma barrinha em cada bloco para mostrar o tempo 
-                    }  
-                    if (quadro.slotsTempo[0] == 0) {
-                        if(document.querySelector(`#slot_${quadro.posicaoTempo}`).className == 'bloco') {
-                            document.querySelector(`.bloco`).className = 'bloco_concluido';
-                        }
-                        if(document.querySelector(`#slot_${quadro.posicaoTempo}`).className == 'descanco') {
-                            document.querySelector(`.descanco`).className = 'descanco_concluido';
-                        }
-                        if(document.querySelector(`#slot_${quadro.posicaoTempo}`).className == 'premio') {
-                            document.querySelector(`.premio`).className = 'premio_concluido';
-                        }
-                        quadro.slotsTempo.shift()
-                        quadro.posicaoTempo++;
-                    }
-                    if (quadro.cronometro == quadro.tempo) {
-                        clearInterval(relogio);                     
-                    }
-                }, 25) 
-                let pause = document.querySelector('#pause') /* Quando pausar ter que justificar o motivo da pausa */
-                pause.addEventListener("click", function() {
-                    clearInterval(relogio) 
-                    document.querySelector('#play').style.display = 'block';
-                    document.querySelector('#pause').style.display = 'none';                     
-                })
-                document.querySelector('#play').style.display = 'none';
-                document.querySelector('#pause').style.display = 'block';
-                break;
-        }
-    }
+    let revisao1 = document.createElement('input');
+    revisao1.type = 'checkbox';
+    revisao1.name = 'revisao_1';
+    revisao1.id = 'revisao_1';
+    revisao1.value = '1';
+    revisao1.className = 'revisao_marcar';
 
+    let label7 = document.createElement('label')
+    label7.for = 'revisao_7';
+    
+    let revisao7 = document.createElement('input');
+    revisao7.type = 'checkbox';
+    revisao7.name = 'revisao_7';
+    revisao7.id = 'revisao_7';
+    revisao7.value = '7';
+    revisao7.className = 'revisao_marcar';
+
+    let label30 = document.createElement('label')
+    label30.for = 'revisao_30';
+    
+
+    let revisao30 = document.createElement('input');
+    revisao30.type = 'checkbox';
+    revisao30.name = 'revisao_30';
+    revisao30.id = 'revisao_30';
+    revisao30.value = '30';
+    revisao30.className = 'revisao_marcar';
+
+    let label60 = document.createElement('label')
+    label60.for = 'revisao_60';
+    
+    let revisao60 = document.createElement('input');
+    revisao60.type = 'checkbox';
+    revisao60.name = 'revisao_60';
+    revisao60.id = 'revisao_60';
+    revisao60.value = '60';
+    revisao60.className = 'revisao_marcar';
+
+    let botoes = document.createElement('div')
+    botoes.id = 'botoes';
+
+    let submit = document.createElement('input')
+    submit.type = 'submit'
+    submit.id = 'submit'
+    submit.value = acao == 'inserir' ?  'Criar' : 'Atualizar'
+
+    let cancelar = document.createElement('button')
+    cancelar.id = 'cancelar'
+    cancelar.addEventListener('click', esconderModal);
+    cancelar.innerHTML =  'Cancelar'
+
+    modal.appendChild(form)
+    form.appendChild(inputTitulo);
+    form.appendChild(inputTempo);
+    form.appendChild(texto_input);
+    texto_input.appendChild(inputDescricao);
+    form.appendChild(revisao_container);
+    revisao_container.appendChild(label1);
+    label1.appendChild(revisao1);
+    label1.innerHTML += 'Amanhã';
+    revisao_container.appendChild(label7);
+    label7.appendChild(revisao7);
+    label7.innerHTML += '7 dias';
+    revisao_container.appendChild(label30);
+    label30.appendChild(revisao30);
+    label30.innerHTML += '30 dias';
+    revisao_container.appendChild(label60);
+    label60.appendChild(revisao60);
+    label60.innerHTML += '60 dias';
+    form.appendChild(botoes)
+    botoes.appendChild(submit)
+    botoes.appendChild(cancelar)
+    
+    let body = document.querySelector('body')
+    body.insertBefore(fundo, body[0])
+    body.insertBefore(modal, body[0])
 }
 
-class Bd{
-    constructor(){
-
-    }
-
-    salvar(){
-        localStorage.setItem('dia', JSON.stringify(quadro))
-    }
+function criar() {
+    abrirModal('inserir')
 }
 
-
-
-class Bloco {
-    constructor(titulo, tempo, anotacao, revisao = Array(), marcador) {
-        this.titulo = titulo;
-        this.tempo = tempo;
-        this.anotacao = anotacao;
-        this.revisao = revisao;
-        this.marcador = marcador;
-    }
-    /* Valida campos do fomulário do bloco */
-    validaCampos() {
-        this.tempo = parseInt(this.tempo);
-        if(this.titulo != '' && this.tempo != '') {
-            if(isNaN(this.tempo)) {
-                logErroFormModal('tempo');
-                return false
-            }
-            return true
-        }
-    }
-}
-
-let quadro = new Quadro();
-let bd = new Bd();
-function mudarCorBarraProgresso(posicaoTempo) {
-    if(quadro.slots[posicaoTempo-1].className == 'bloco'){
-        document.querySelector(`#barra_progresso`).style.backgroundColor  = `#6E28A8`;
-    }    
-    if(quadro.slots[posicaoTempo-1].className == 'descanco') {
-        document.querySelector(`#barra_progresso`).style.backgroundColor  = `#5FAFF5`;
-    }
-    if(quadro.slots[posicaoTempo-1].className == 'premio') {
-        document.querySelector(`#barra_progresso`).style.backgroundColor  = `#f5cb5c`;
-    }
-}
-
-/* Escolhe entre uma das 3 opções e cria um bloco novo */
-
-function criar(a) {
-    switch(a) {
-        case 1: /* Bloco */
-            var fundo = document.getElementById('fundo_modal');
-            var modal = document.getElementById('modal');
-            modal.style.display = "grid";
-            fundo.style.display = "block";
-            break;
-        case 2: /* Descanço */
-            if(document.querySelector("#campoTempo") == null){
-                quadro.adicionarDescanco();
-            }
-            break;
-        case 3: /* Recompensa */
-            if(document.querySelector("#campoPremio") == null){
-                quadro.adicionarRecompensa();;
-            };
-            break;
-    }
+function editar(id, titulo, tempo, descricao) {
+    abrirModal('atualizar', id, titulo, tempo, descricao);
 }
 
 function esconderModal() {
-    var fundo = document.getElementById('fundo_modal')
-    modal.style.display = "none";
-    fundo.style.display = "none"
+    let modal = document.querySelector('#modal');
+    let fundo = document.querySelector('#fundo_modal')
+    modal.remove();
+    fundo.remove();
 }
 
-function criarBloco() {
-    let titulo = document.querySelector('#titulo_bloco').value;
-    let tempo = document.querySelector('#tempo_bloco').value;
-    let anotacao = document.querySelector('#anotacao_bloco').value;
-    let marcador = document.querySelector('.selecionado') == null ? logErroFormModal('etiqueta') : document.querySelector('.selecionado').className;
-    document.querySelector('#etiqueta').style.border = '';
-    marcador = marcador.slice(28, marcador.length); 
-    let revisao = Array();
-    revisao = document.querySelectorAll('.revisao_marcar');
-    let revisaoMarcada = Array();
-    revisao.forEach(function(r) {
-        if(r.checked == true) {
-            revisaoMarcada.push(r.value);
-        }
-    })
-    let bloco = new Bloco(titulo, tempo, anotacao, revisaoMarcada, marcador)
-    if(bloco.validaCampos()) {
-        quadro.adicionarBloco(bloco);
-        limparCampos(revisao);
-        esconderModal();
-    }
+function excluirBloco(id) {
+    window.confirm('dejesa apagar esse bloco?')
+    location.href = 'app/quadro.controller.php?acao=remover&id='+id;
 }
 
-function limparCampos(revisao) {
-    document.querySelector('#titulo_bloco').value = "";
-    document.querySelector('#tempo_bloco').value = "";
-    document.querySelector('#anotacao_bloco').value = "";
-    document.querySelector('.selecionado').style.borderBottom = "none";
-    document.querySelector('.selecionado').className = "select_etiqueta";
-    revisao.forEach(function(r) {
-        r.checked = false
-    })
-}
+function excluirRevisao(id) {
+    window.confirm('dejesa apagar essa revisao?')
+    location.href = 'app/quadro.controller.php?acao=removerRevisao&id='+id;
 
-function selecionarMarcador(cor) {
-    let corSelecionada = '';
-    function troca() {
-        document.querySelector('.selecionado').style.borderBottom = 'none';
-        document.querySelector('.selecionado').className = 'select_etiqueta';
-    }
-    function seleciona(cor, hex) {
-        document.querySelector(`#etiqueta_${cor}`).className += ` selecionado ${cor}`;
-        document.querySelector(`#etiqueta_${cor}`).style.borderBottom = `2px solid ${hex}`;
-    }
-        
-        switch(cor) {
-            case 'amarelo':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('amarelo', '#f5cb5c');
-                break;
-            case 'verde':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('verde', '#2b9348');
-                break;
-            case 'azul':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('azul', '#0086eb');
-                break;
-            case 'laranja':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('laranja', '#fb8500');
-                break;
-            case 'vermelho':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('vermelho', '#d00000');
-                break;
-            case 'roxo':
-                corSelecionada = cor;
-                if(document.querySelector('.selecionado') != null) {
-                    troca();
-                }
-                seleciona('roxo', '#6e28a8');
-                break;
-        }
-}
-
-function logErroFormModal(campo) {
-    if(campo == 'etiqueta') {
-        document.querySelector(`#etiqueta`).style.border = '2px solid red';
-    } 
-    document.querySelector(`#${campo}_bloco`).style.border = '2px solid red';
-}
-
-function submitTempo(index) {
-    let input = document.querySelector(`#slot_${index} #campoTempo`);
-    input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            let tempo = parseInt(input.value)
-            if(isNaN(tempo) == false) {
-                quadro.mostrarDescanco(index, tempo);
-            }
-        }
-    })
-}
-
-function submitPremio(index) {
-    let input = document.querySelector(`#slot_${index} #campoPremio`);
-    input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            let recompensa = input.value
-            if(recompensa != '' || recompensa != undefined || recompensa != null) {
-                quadro.mostrarRecompensa(index, recompensa);
-            }
-        }
-    })
 }
