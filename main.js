@@ -9,7 +9,7 @@ function abrirModal(acao = '', id = '', titulo = '', descricao = '', tempo = '')
     modal.id = 'modal';
 
     let form = document.createElement('form');
-    form.action = acao == 'inserir' ? `app/quadro.controller.php?acao=inserir&dia=${document.querySelector('#data').value}` : `app/quadro.controller.php?acao=atualizar&id=${id}&dia=${document.querySelector('#data').value}`;
+    form.action = acao == 'inserir' ? `app/quadro.controller.php?acao=inserir&dia=${document.querySelector('#dia').value}` : `app/quadro.controller.php?acao=atualizar&id=${id}&dia=${document.querySelector('#dia').value}`;
     form.method = 'post';
     form.id = 'form_modal';
 
@@ -144,5 +144,5 @@ function esconderModal() {
 
 function excluir(id) {
     window.confirm('dejesa apagar esse bloco?')
-    location.href = 'app/quadro.controller.php?acao=remover&id='+id+'&dia='+document.querySelector('#data').value;
+    location.href = 'app/quadro.controller.php?acao=remover&id='+id+'&dia='+document.querySelector('#dia').value;
 }

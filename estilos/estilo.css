@@ -16,15 +16,20 @@ body {
 }
 
 /* Quadro */
-
-select {
-    grid-row: 1/2;
-    width: 20%;
-    height: 100%;
+#datas {
+    display: flex;
+    grid-row: 1/2;    
     align-self: center;
     justify-self: flex-start;
-    margin: 1%;
     margin-top: 20px;
+    margin: 1%;
+    height: 100%;
+    width: 40%;
+
+}
+
+input#dia, select#revisao {
+    width: 50%;
     background-color: #333533;
     border: none;
     color: white;

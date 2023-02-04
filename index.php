@@ -22,16 +22,19 @@
 </head>
 <body>
     <!-- Quadro -->
-    <select name="dias" id="data" onchange="mudarDia(this.value)">
-        <option value="<?= $dia ?>" default style="display:none;"><?= $dia ?></option>
-        <option value="<?=date('Y-m-d')?>"><?=date('Y-m-d')?></option>
-        <?php 
-            sort($dias);
-            foreach($dias as $indice => $dia) { 
-            if(date('Y-m-d') != $dia->dia) { ?> 
-            <option value="<?=$dia->dia?>"><?=$dia->dia?></option>
-      <?php } } ?>
-        </select> 
+    <div id="datas">
+        <input type="date" name="dia" id="dia" onchange="mudarDia(this.value)" value="<?= $dia ?>">
+        <select name="dias" id="revisao" onchange="mudarDia(this.value)">
+            <option value="<?= $dia ?>" default style="display:none;"><?= $dia ?></option>
+            <option value="<?=date('Y-m-d')?>"><?=date('Y-m-d')?></option>
+            <?php
+                sort($dias);
+                foreach($dias as $indice => $dia) {
+                if(date('Y-m-d') != $dia->dia) { ?>
+                <option value="<?=$dia->dia?>"><?=$dia->dia?></option>
+          <?php } } ?>
+            </select>
+    </div>
     <main id="quadro">
         <?php #imprimindo os blocos no quadro
             foreach($blocos as $bloco) { ?>
