@@ -1,2 +1,3 @@
-# Projeto_Estudar
- Projeto_Estudar
+# Projeto Estudar
+ 
+ Um projeto de auxiliação de estudos, com base no método de blocagem
